@@ -1,0 +1,21 @@
+# DNS server for Adguard Home
+
+apiVersion: v1
+kind: Service 
+metadata:
+  name: adguard-dns-service
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local 
+  selector:
+    app.kubernetes.io/name: adguard-home
+  ports:
+    - name: dns-udp
+      protocol: UDP 
+      port: 53
+      targetPort: 53
+    - name: dns-tcp
+      protocol: TCP
+      port: 53
+      targetPort: 53
+
