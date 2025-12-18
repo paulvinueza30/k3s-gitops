@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: activepieces-pg
+  namespace: automation
+spec:
+  serviceName: "activepieces-pg" # ⚠️ This must match the Service name below
+  replicas: 1
+  selector:
+    matchLabels:
+      app: activepieces-pg
+  template:
+    metadata:
+      labels:
+        app: activepieces-pg
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        env:
+        - name: POSTGRES_DB
+          value: activepieces
+        - name: POSTGRES_USER
+          value: activepieces
+        - name: POSTGRES_PASSWORD
+          value: "supersecretpassword" 
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: pg-data
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: pg-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: activepieces-pg  
+  namespace: automation
+spec:
+  selector:
+    app: activepieces-pg
+  ports:
+    - port: 5432
+      targetPort: 5432

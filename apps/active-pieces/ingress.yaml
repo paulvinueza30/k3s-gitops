@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress 
+metadata:
+  name: activepieces-ingress
+  namespace: automation
+spec:
+  rules:
+  - host: activepieces.local
+    http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+              service:
+                name: activepieces
+                port:
+                  number: 80
+
