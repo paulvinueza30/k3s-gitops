@@ -42,6 +42,17 @@ spec:
               value: "e580a1b5dbcd419f52552b4620aa48e0"
             - name: AP_JWT_SECRET
               value: "21d1d7006e9c6e207e09f773612f29e20a534e5e33a0809a85f7805a49dfd213"
+            
+              ### SANDBOX env vars for code blocks
+            - name: AP_SANDBOX_PROPAGATED_ENV_VARS
+              value: "AP_GITHUB_TOKEN"
+
+            - name: AP_GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: activepieces-api-keys
+                  key: github-token
+
 ---
 apiVersion: v1
 kind: Service
