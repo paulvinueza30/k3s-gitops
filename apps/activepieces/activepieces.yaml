@@ -13,15 +13,19 @@ spec:
       labels:
         app: activepieces
     spec:
+      hostAliases:
+        - ip: "10.0.0.110"
+          hostnames:
+            - "activepieces.local"
       containers:
         - name: activepieces
-          image: ghcr.io/activepieces/activepieces:latest
+          image: activepieces/activepieces:latest
           ports:
             - name: http
               containerPort: 80
           env:
             - name: AP_FRONTEND_URL
-              value: "https://ap.example.com/"
+              value: "http://activepieces.local"
             - name: AP_REDIS_HOST
               value: activepieces-redis-master
             - name: AP_REDIS_PORT

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inbox-zero-web
+  namespace: inbox-zero
+  labels:
+    app: inbox-zero-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inbox-zero-web
+  template:
+    metadata:
+      labels:
+        app: inbox-zero-web
+    spec:
+      containers:
+      - name: web
+        image: ghcr.io/elie222/inbox-zero:latest
+        ports:
+          - containerPort: 3000
+        envFrom:
+        - secretRef:
+            name: inbox-zero-secrets
+

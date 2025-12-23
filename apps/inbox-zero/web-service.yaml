@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inbox-zero-web
+  namespace: inbox-zero
+spec:
+  type: ClusterIP
+  selector:
+    app: inbox-zero-web
+  type: 
+  ports:
+  - name: inbox-zero-web
+    protocol: 
+    port: 80
+    targetPort: 3000
+
