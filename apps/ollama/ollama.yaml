@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  namespace: ai-provider
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+    spec:
+      securityContext:
+        runAsUser: 0
+        supplementalGroups: [993]
+      nodeSelector:
+        gpu: "true"
+      containers:
+      - name: ollama
+        securityContext:
+          privileged: true
+        image: robertrosenbusch/rocm6_gfx803_ollama:6.4.1_0.9.5
+        env:
+        - name: HSA_OVERRIDE_GFX_VERSION
+          value: "8.0.3"
+        - name: HIP_PATH
+          value: "/opt/rocm/lib/"
+        - name: LD_LIBRARY_PATH
+          value: "/opt/rocm/lib"
+        - name: OLLAMA_DEBUG
+          value: "1" 
+        - name: ROC_ENABLE_PRE_VEGA
+          value: "1"
+        - name: OLLAMA_ORIGINS
+          value: "*"
+        resources:
+          limits:
+            amd.com/gpu: 1
+        volumeMounts:
+        - name: ollama-storage
+          mountPath: /root/.ollama
+        - name: dev-kfd
+          mountPath: /dev/kfd
+        - name: dev-dri
+          mountPath: /dev/dri
+        - name: sys
+          mountPath: /sys
+          readOnly: true
+      volumes:
+      - name: ollama-storage
+        persistentVolumeClaim:
+          claimName: ollama-pvc
+      - name: dev-kfd
+        hostPath:
+          path: /dev/kfd
+      - name: dev-dri
+        hostPath:
+          path: /dev/dri
+      - name: sys
+        hostPath:
+          path: /sys

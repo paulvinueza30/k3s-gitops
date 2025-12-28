@@ -1,0 +1,16 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-service
+  namespace: ai-provider
+spec:
+  selector:
+    app: ollama
+  type: ClusterIP
+  ports:
+  - name: ollama-service
+    protocol: TCP
+    port: 11434
+
+

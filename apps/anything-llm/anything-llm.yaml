@@ -24,6 +24,7 @@ spec:
     spec:
       containers:
       - name: anything-llm
+        # image: mintplexlabs/anythingllm:lancedb_revert
         image: mintplexlabs/anythingllm:latest
         envFrom:
         - secretRef:
